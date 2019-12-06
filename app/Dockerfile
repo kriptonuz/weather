@@ -1,4 +1,4 @@
-FROM php:7.4-fpm as developer
+FROM php:7.2-fpm as developer
 ARG DOCKER_HOST_IP=172.17.0.1
 ARG IDE_KEY=app
 ARG SERVER_NAME=app

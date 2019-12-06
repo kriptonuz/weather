@@ -6,45 +6,24 @@
                 <div class="card card-weather">
                     <div class="card-body">
                         <div class="weather-date-location">
-                            <h3>Friday</h3>
-                            <p class="text-gray"> <span class="weather-date">25 March, 2019</span> <span class="weather-location">Sydney, Australia</span> </p>
+                            <h3>{{current.day}}</h3>
+                            <p class="text-gray"> <span class="weather-date">{{current.date}}</span> <span class="weather-location">{{city}}</span> </p>
+                        </div>
+                        <div class="dropdown">
+                            <v-select v-model="city" :options="['tashkent', 'moscow', 'london']" @input="update"></v-select>
                         </div>
                         <div class="weather-data d-flex">
                             <div class="mr-auto">
-                                <h4 class="display-3">{{urldata.current.temp}} <span class="symbol">°</span>C</h4>
-                                <p>{{urldata.current.phrase}}</p>
+                                <h4 class="display-3">{{current.temp}} <span class="symbol">°</span>C</h4>
+                                <p>{{current.phrase}}</p>
                             </div>
                         </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="d-flex weakly-weather">
-                            <div class="weakly-weather-item">
-                                <p class="mb-0"> Sun </p> <i class="mdi mdi-weather-cloudy"></i>
-                                <p class="mb-0"> 30° </p>
-                            </div>
-                            <div class="weakly-weather-item">
-                                <p class="mb-1"> Mon </p> <i class="mdi mdi-weather-hail"></i>
-                                <p class="mb-0"> 31° </p>
-                            </div>
-                            <div class="weakly-weather-item">
-                                <p class="mb-1"> Tue </p> <i class="mdi mdi-weather-partlycloudy"></i>
-                                <p class="mb-0"> 28° </p>
-                            </div>
-                            <div class="weakly-weather-item">
-                                <p class="mb-1"> Wed </p> <i class="mdi mdi-weather-pouring"></i>
-                                <p class="mb-0"> 30° </p>
-                            </div>
-                            <div class="weakly-weather-item">
-                                <p class="mb-1"> Thu </p> <i class="mdi mdi-weather-pouring"></i>
-                                <p class="mb-0"> 29° </p>
-                            </div>
-                            <div class="weakly-weather-item">
-                                <p class="mb-1"> Fri </p> <i class="mdi mdi-weather-snowy-rainy"></i>
-                                <p class="mb-0"> 31° </p>
-                            </div>
-                            <div class="weakly-weather-item">
-                                <p class="mb-1"> Sat </p> <i class="mdi mdi-weather-snowy"></i>
-                                <p class="mb-0"> 32° </p>
+                            <div class="weakly-weather-item" v-for="item in forecast" v-bind:key="item.date">
+                                <p class="mb-1"> {{window.moment(item.date).format('ddd')}} </p>
+                                <p class="mb-0"> {{item.day.temp}} </p>
                             </div>
                         </div>
                     </div>
@@ -61,16 +40,30 @@
         name: "Weather",
         data: function () {
             return {
-                urldata: []
+                urldata: [],
+                city: 'tashkent',
+                current: {
+                    day: '',
+                    date: '',
+                    temp: '',
+                    phrase: '',
+                },
+                forecast: [],
+                window: window
             }
         },
         mounted() {
             this.update()
         },
         methods: {
-            update: function () {
-                window.axios.get('http://localhost:8080/city').then((response) => {
+            update: function (city = 'tashkent') {
+                window.axios.get('http://localhost:8080/city/' + city).then((response) => {
                     this.urldata = response.data
+                    this.current = response.data.current
+                    this.current.day = window.moment.unix(response.data.current.date).format('dddd')
+                    this.current.date = window.moment.unix(response.data.current.date).format('MMMM Do')
+                    this.city = response.data.city
+                    this.forecast = response.data.forecast
                     console.log(response.data)
                 })
             }
@@ -174,7 +167,7 @@
     }
 
     .card-weather .weakly-weather .weakly-weather-item {
-        flex: 0 0 14.28%;
+        flex: 0 0 20%;
         border-right: 1px solid #f2f2f2;
         padding: 1rem;
         text-align: center

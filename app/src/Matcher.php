@@ -19,7 +19,7 @@ class Matcher extends \Cekta\Routing\Nikic\Matcher
     ) {
         $builder = new DispatcherBuilder();
         $builder->get('/', Hello::class);
-        $builder->get('/city', City::class);
+        $builder->get('/city/{city:\w+}', City::class);
         parent::__construct(
             new Handler(NotFound::class),
             $builder->build(),

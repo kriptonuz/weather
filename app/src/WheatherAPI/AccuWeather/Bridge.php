@@ -17,14 +17,16 @@ class Bridge implements BridgeInterface
     protected const API_ENDPOINT = 'https://dataservice.accuweather.com/';
 
     private const CITY_ID = [
-        'samarkand' => 355776,
         'tashkent' => 351199,
+        'moscow' => 294021,
+        'london' => 328328,
     ];
 
     public function __construct(Client $httpClient)
     {
         $this->httpClient = $httpClient;
         $this->token = 'mf6zSCSKxUVAD46e9a6xZMk5UY2lq7Xf';
+//        $this->token = 'j5BGgYPbK4RwULffaswblKWWhGPzr3VG';
     }
 
     public function getWeather(string $city)
@@ -57,6 +59,8 @@ class Bridge implements BridgeInterface
     protected function parse($raw_current_weather, $raw_forecast, $city)
     {
         $result = [];
+
+        $result['city'] = ucfirst($city);
 
         $result['current'] = [
             'date' => $raw_current_weather[0]->EpochTime,

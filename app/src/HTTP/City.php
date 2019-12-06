@@ -15,7 +15,13 @@ class City implements RequestHandlerInterface
     /**
      * @var BridgeInterface
      */
-    private $api;
+    private BridgeInterface $api;
+
+    private array $cities = [
+        'tashkent',
+        'moscow',
+        'london',
+    ];
 
     public function __construct(BridgeInterface $api)
     {
@@ -24,7 +30,11 @@ class City implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $weather = $this->api->getWeather('tashkent');
+        $city = $request->getAttribute('city');
+        if (!in_array($city, $this->cities)) {
+            return new JsonResponse(['City not Found'], 404, ['Access-Control-Allow-Origin' => '*']);
+        }
+        $weather = $this->api->getWeather($city);
         return new JsonResponse($weather, 200, ['Access-Control-Allow-Origin' => '*']);
     }
 }

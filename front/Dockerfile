@@ -1,4 +1,6 @@
 FROM node:12 as developer
 WORKDIR /app
-CMD ["./cmd.sh"]
+
+CMD ["yarn", "serve"]
+
 EXPOSE 8080
