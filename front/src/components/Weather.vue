@@ -23,7 +23,7 @@
                         <div class="d-flex weakly-weather">
                             <div class="weakly-weather-item" v-for="item in forecast" v-bind:key="item.date">
                                 <p class="mb-1"> {{window.moment(item.date).format('ddd')}} </p>
-                                <p class="mb-0"> {{item.day.temp}} </p>
+                                <p class="mb-0"> {{item.day.temp}} <span class="symbol">°</span> </p>
                             </div>
                         </div>
                     </div>
