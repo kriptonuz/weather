@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\HTTP\CitiesAvailable;
 use App\HTTP\City;
 use App\HTTP\Hello;
 use App\HTTP\NotFound;
@@ -20,6 +21,7 @@ class Matcher extends \Cekta\Routing\Nikic\Matcher
         $builder = new DispatcherBuilder();
         $builder->get('/', Hello::class);
         $builder->get('/city/{city:\w+}', City::class);
+        $builder->get('/cities', CitiesAvailable::class);
         parent::__construct(
             new Handler(NotFound::class),
             $builder->build(),

@@ -9,8 +9,7 @@ RUN apt-get update \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug \
     && docker-php-ext-install pdo_pgsql \
-    && curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet \
-    && ln -s /app/cli.php /usr/local/bin/app
+    && curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
 COPY developer/php-fpm.conf /usr/local/etc/
 COPY developer/php.ini /usr/local/etc/php/
 WORKDIR /app
@@ -28,8 +27,7 @@ COPY production/php-fpm.conf /usr/local/etc/
 COPY production/php.ini /usr/local/etc/php/
 RUN apt-get update \
     && apt-get install -y libpq-dev \
-    && docker-php-ext-install pdo_pgsql \
-    && ln -s /app/cli.php /usr/local/bin/app
+    && docker-php-ext-install pdo_pgsql
 WORKDIR /app/public
 
 FROM production as migration
